@@ -1,0 +1,2 @@
+Before navigating to Accounts page
+After navigating to Accounts page

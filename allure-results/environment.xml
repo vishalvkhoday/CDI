@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <environment>
 	<parameter>
 		<key>Browser</key>
 		<value>Chrome</value>
 	</parameter>
 	<parameter>
-		<key>Browser.Version</key>
-		<value>81.0</value>
+		<key>Browser Version</key>
+		<value>86.0</value>
 	</parameter>
 	<parameter>
-		<key>Stand</key>
-		<value>Test-Instance</value>
+		<key>User</key>
+		<value>testfield</value>
 	</parameter>
 	<parameter>
-	<key>Test-URL</key>
-	<value>https://tcdi-test.crm.dynamics.com/main.aspx</value>
+		<key>URL</key>
+		<value>https://tcdi-test.crm.dynamics.com/</value>
 	</parameter>
+
 </environment>

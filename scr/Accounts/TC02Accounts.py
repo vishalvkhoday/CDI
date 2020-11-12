@@ -108,7 +108,7 @@ def test_12():
     allure.attach.file("C:/Users/DELL/Downloads/image.png", "ScreenShot", attachment_type=None, extension="PNG")
     sleep(random.randint(0,36))
     allure_pytest.plugin.allure.step(title="This is the plugin title")
-    assert False
+    assert True
      
 @allure.description("This is test descript to be printed on the report")
 @allure.title(test_title="This is testcase nos 13")
@@ -116,5 +116,5 @@ def test_12():
 def test_13():
     allure.attach.file("C:/Users/DELL/Downloads/image.png", "ScreenShot", attachment_type=None, extension="PNG")
     sleep(random.randint(0,36))
-    assert False
+    assert True
     
