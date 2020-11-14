@@ -36,6 +36,10 @@ def test_CreateQuote ():
         sleep(random.randint(0,15))
 
         fn_CaptureScreenShot("Pass", "Completed !!!")
+        fn_ClickProductTab()
+        fn_ClickAddProductBtn()
+        fn_ClickAddCheckClose()
+        
         assert True
         fn_closeBrowser()
     except:

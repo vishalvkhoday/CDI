@@ -17,7 +17,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import *
-
+from selenium.webdriver.support.select import Select
+import allure_pytest
 
 def ChromeDriver():
     try:
@@ -78,6 +79,8 @@ def fn_RandString(intlen):
 def getWindowName():
     lstwnd =Browser.window_handles
     if len(lstwnd)>1:
+        return lstwnd
+    else:
         return lstwnd
     
     
@@ -188,11 +191,22 @@ def fn_EnterQuoteSummaryInfo():
         Browser.find_element_by_xpath("//*[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-3-name6-name.fieldControl-text-box-text']").clear()
         Browser.find_element_by_xpath("//*[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-3-name6-name.fieldControl-text-box-text']").send_keys(strQuoteName)
         sleep(2)
-        Browser.find_element_by_xpath('//*[@id="id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-9-customerid8"]').click()
-        Browser.find_element_by_xpath('//*[@id="id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-9-customerid8-customerid.fieldControl-LookupResultsDropdown_customerid_1_infoContainer_0_0"]').click()
+        
+        # select account
+        Browser.find_element_by_xpath('//*[@data-id="customerid.fieldControl-LookupResultsDropdown_customerid_textInputBox_with_filter_new"]').click()
+        WebDriverWait(Browser,10).until(EC.presence_of_all_elements_located((By.XPATH,'//*[@id="id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-9-customerid8-customerid.fieldControl-LookupResultsDropdown_customerid_1_resultsLabel_0_0"]')), "Waiting for Account Lookup values to appear")
+        Browser.find_element_by_xpath('//*[@id="id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-9-customerid8-customerid.fieldControl-LookupResultsDropdown_customerid_1_resultsLabel_0_0"]').click()
+                        
+                        
+#           Enter contact name        
+        Browser.find_element_by_xpath("//*[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-13-troxcdi_contactname8-troxcdi_contactname.fieldControl-LookupResultsDropdown_troxcdi_contactname_2_textInputBox_with_filter_new']").click()
+        Browser.find_element_by_xpath("//*[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-13-troxcdi_contactname8-troxcdi_contactname.fieldControl-LookupResultsDropdown_troxcdi_contactname_2_textInputBox_with_filter_new']").clear()
+        Browser.find_element_by_xpath("//*[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-13-troxcdi_contactname8-troxcdi_contactname.fieldControl-LookupResultsDropdown_troxcdi_contactname_2_textInputBox_with_filter_new']").send_keys('Vishal khoday ')
+        WebDriverWait(Browser,30).until(EC.element_to_be_clickable((By.XPATH,"//*[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-13-troxcdi_contactname8-troxcdi_contactname.fieldControl-LookupResultsDropdown_troxcdi_contactname_2_resultsContainer_0_0']")),"Waiting for Contact lookup values to appear")
+        Browser.find_element_by_xpath("//*[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-13-troxcdi_contactname8-troxcdi_contactname.fieldControl-LookupResultsDropdown_troxcdi_contactname_2_resultsContainer_0_0']").click()               
     #      Enter account name
-        WebDriverWait(Browser,30).until(EC.element_to_be_clickable((By.XPATH,"//*[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-9-customerid8-customerid.fieldControl-LookupResultsDropdown_customerid_1_infoContainer_0_0']")), "Waiting for Account Lookup values to appear")
-        Browser.find_element_by_xpath("//*[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-9-customerid8-customerid.fieldControl-LookupResultsDropdown_customerid_5_resultsLabel_0_0'][1]").click()
+#         WebDriverWait(Browser,30).until(EC.element_to_be_clickable((By.XPATH,"//input[@data-id='troxcdi_contactname.fieldControl-LookupResultsDropdown_troxcdi_contactname_textInputBox_with_filter_new']")), "Waiting for Account Lookup values to appear")
+#         Browser.find_element_by_xpath("//input[@data-id='troxcdi_contactname.fieldControl-LookupResultsDropdown_troxcdi_contactname_textInputBox_with_filter_new']").click()
         
         ## Enter memo details
 #         Browser.find_element_by_xpath("//textarea[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-26-description6-description.fieldControl-text-box-text']").location_once_scrolled_into_view
@@ -201,18 +215,14 @@ def fn_EnterQuoteSummaryInfo():
 #         
         ## select category
         Browser.find_element_by_xpath("//button[@class='msos-caret-button']").click()
-        WebDriverWait(Browser,30).until(EC.element_to_be_clickable((By.ID,"troxcdi_category_item1")),"Waiting for drop down to appear")
-    # troxcdi_category_item1 click 1st item
-        Browser.find_element_by_xpath("(//div[@class='msos-label-text msos-optionitem-text'])[2]").click()
+        sleep(2)
+    # troxcdi_category_item1 click 2nd item
+        Browser.find_element_by_xpath('//*[@id="troxcdi_category_i"]/div[6]/div[2]/ul/li[2]/label/div').click()
         sleep(5)
         fn_CaptureScreenShot("Pass", "Quote detils entered")
+        sleep(5)
         Browser.find_element_by_xpath("//button[@class='msos-caret-button']").click()
-    #     Enter contact name        
-        Browser.find_element_by_xpath("//*[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-13-troxcdi_contactname8-troxcdi_contactname.fieldControl-LookupResultsDropdown_troxcdi_contactname_2_textInputBox_with_filter_new']").click()
-        Browser.find_element_by_xpath("//*[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-13-troxcdi_contactname8-troxcdi_contactname.fieldControl-LookupResultsDropdown_troxcdi_contactname_2_textInputBox_with_filter_new']").clear()
-        Browser.find_element_by_xpath("//*[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-13-troxcdi_contactname8-troxcdi_contactname.fieldControl-LookupResultsDropdown_troxcdi_contactname_2_textInputBox_with_filter_new']").send_keys('Vishal khoday ')
-        WebDriverWait(Browser,30).until(EC.element_to_be_clickable((By.XPATH,"//*[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-13-troxcdi_contactname8-troxcdi_contactname.fieldControl-LookupResultsDropdown_troxcdi_contactname_2_resultsContainer_0_0']")),"Waiting for Contact lookup values to appear")
-        Browser.find_element_by_xpath("//*[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-13-troxcdi_contactname8-troxcdi_contactname.fieldControl-LookupResultsDropdown_troxcdi_contactname_2_resultsContainer_0_0']").click()
+    #   
         
         sleep(2)
                 
@@ -275,3 +285,51 @@ def fn_ClickQuotesLink():
     WebDriverWait(Browser,130).until(EC.visibility_of_element_located((By.XPATH,"//span[@class='pa-bv pa-e pa-cp ']")), "Waiting for My Quotes page")
     fn_objExist(Browser.find_element_by_xpath("//span[@class='pa-bv pa-e pa-cp ']"))
 
+
+@allure.step("Click on Product tab in quote page")
+def fn_ClickProductTab():
+    try:
+        Browser.find_element_by_xpath("//li[@title='Products']").click()
+        assert True
+    except Exception as e:
+        print(e)
+        assert False
+        
+@allure.step("Click on Add Product button")
+def fn_ClickAddProductBtn():
+    try:
+        WebDriverWait(Browser,30).until(EC.visibility_of_element_located((By.XPATH,"//iframe[@id='WebResource_QuoteProductGrid']")), "Waiting for Product button")
+        iframeProduct = Browser.find_element_by_xpath("//iframe[@id='WebResource_QuoteProductGrid']")
+        Browser.switch_to.frame(iframeProduct)
+        Browser.find_element_by_id("btn_addproducts").click()  
+        winName = getWindowName()
+        Browser.switch_to.window(winName[0])
+        WebDriverWait(Browser,30).until(EC.visibility_of_element_located((By.XPATH,"//iframe[@id='alertJs-iFrame']")), "Waiting for Product search window")
+        iframeSearch = Browser.find_element_by_xpath("//iframe[@id='alertJs-iFrame']")
+        Browser.switch_to.frame(iframeSearch)
+        SelProduct =Select(Browser.find_element_by_id("product-filter"))
+        SelProduct.select_by_index(0)
+        SelscrType =Select(Browser.find_element_by_id("product-operator"))
+        SelscrType.select_by_index(0)
+        Browser.find_element_by_id("txt-product-search").send_keys("SNN")
+        WebDriverWait(Browser,30).until(EC.element_to_be_clickable((By.XPATH,"//*[@id='product']/tbody/tr[2]/td[1]/input")), "Waiting for Product search window")
+        Browser.find_element_by_xpath("//*[@id='product']/tbody/tr[2]/td[1]/input").click()
+        fn_CaptureScreenShot("Pass", "Clicked on send item in the product search")
+        
+        assert True
+    except Exception as e:
+        print(e)
+        fn_CaptureScreenShot("Fail", "Failed in product search {}".format(e))
+        assert False
+        
+@allure.step("Click on Add Checked & close button")
+def fn_ClickAddCheckClose():
+    try:
+        winName = getWindowName()
+        Browser.find_element_by_xpath("//div[@id='alertJs-tdDialogFooter']/button[3]").click()
+        
+        Browser.switch_to.window(winName[0])
+    except Exception as e:
+        print(e)
+        
+    
