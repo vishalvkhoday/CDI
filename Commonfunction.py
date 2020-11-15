@@ -416,6 +416,3 @@ def fn_getTotalAmountHeader():
     except Exception as e:
         print(e)
 
-#     
-
-    
