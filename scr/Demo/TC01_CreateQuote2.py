@@ -19,23 +19,9 @@ from datetime import date
 def test_CreateQuote ():
     try:
         LaunchBrowser()
-        fn_CaptureScreenShot("Pass","After Browser Launch")
-        fn_rptStepDetails("Pass", "Browser Launched Successfully")
-        sleep(2)
-        fn_rptStepDetails("Pass", "Before navigating to Accounts page")
-        fn_rptTC_Title("Before navigating to Accounts page")
-        fn_NavigateTo_AccountsPage()
-        fn_rptTC_Title("After navigating to Accounts page")
-        fn_NavigateTo_QuotesPage()
+#         fn_NavigateTo_QuotesPage()
+        
         fn_CaptureScreenShot("Pass", "Quote page navigation completed!!!")
-        sleep(5)
-        fn_ClickOnNewQuote()
-#         fn_VerifyQuotePage()
-        sleep(5)
-        fn_EnterQuoteSummaryInfo()
-        
-        
-        fn_ClickProductTab()
         fn_ClickAddProductBtn()
         scrProdList =fn_SelectProduct()
         fn_ClickAddCheckClose()

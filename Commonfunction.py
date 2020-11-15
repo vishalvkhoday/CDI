@@ -20,6 +20,7 @@ from selenium.common.exceptions import *
 from selenium.webdriver.support.select import Select
 import allure_pytest
 
+
 def ChromeDriver():
     try:
         WebOptions = webdriver.ChromeOptions()
@@ -220,12 +221,9 @@ def fn_EnterQuoteSummaryInfo():
         Browser.find_element_by_xpath('//*[@id="troxcdi_category_i"]/div[6]/div[2]/ul/li[2]/label/div').click()
         sleep(5)
         fn_CaptureScreenShot("Pass", "Quote detils entered")
-        sleep(5)
-        Browser.find_element_by_xpath("//button[@class='msos-caret-button']").click()
-    #   
-        
         sleep(2)
-                
+        Browser.find_element_by_xpath("//button[@class='msos-caret-button']").click()
+                   
     except Exception as e:
         fn_CaptureScreenShot("Fail", "Error while entering quote details {}".format(e))
         
@@ -298,38 +296,126 @@ def fn_ClickProductTab():
 @allure.step("Click on Add Product button")
 def fn_ClickAddProductBtn():
     try:
-        WebDriverWait(Browser,30).until(EC.visibility_of_element_located((By.XPATH,"//iframe[@id='WebResource_QuoteProductGrid']")), "Waiting for Product button")
-        iframeProduct = Browser.find_element_by_xpath("//iframe[@id='WebResource_QuoteProductGrid']")
-        Browser.switch_to.frame(iframeProduct)
+#         WebDriverWait(Browser,30).until(EC.visibility_of_element_located((By.XPATH,"//iframe[@id='WebResource_QuoteProductGrid']")), "Waiting for Product button")
+        WebDriverWait(Browser,30).until(EC.frame_to_be_available_and_switch_to_it(Browser.find_element_by_xpath("//iframe[@id='WebResource_QuoteProductGrid']")))
+#         iframeProduct = Browser.find_element_by_xpath("//iframe[@id='WebResource_QuoteProductGrid']")
+#         sleep(1)
+#         Browser.switch_to.frame(iframeProduct)
         Browser.find_element_by_id("btn_addproducts").click()  
+
+    except Exception as e:
+        print(e)
+        fn_CaptureScreenShot("Fail", "Failed in product search {}".format(e))
+        assert False
+        
+@allure.step("Select product in product search")
+def fn_SelectProduct():
+    try:
         winName = getWindowName()
         Browser.switch_to.window(winName[0])
-        WebDriverWait(Browser,30).until(EC.visibility_of_element_located((By.XPATH,"//iframe[@id='alertJs-iFrame']")), "Waiting for Product search window")
-        iframeSearch = Browser.find_element_by_xpath("//iframe[@id='alertJs-iFrame']")
-        Browser.switch_to.frame(iframeSearch)
+#         WebDriverWait(Browser,30).until(EC.visibility_of_element_located((By.XPATH,"//iframe[@id='alertJs-iFrame']")), "Waiting for Product search window")
+        WebDriverWait(Browser,30).until(EC.frame_to_be_available_and_switch_to_it(Browser.find_element_by_xpath("//iframe[@id='alertJs-iFrame']")))
+        sleep(3)
+#         iframeSearch = Browser.find_element_by_xpath("//iframe[@id='alertJs-iFrame']")
+#         Browser.switch_to.frame(iframeSearch)
         SelProduct =Select(Browser.find_element_by_id("product-filter"))
         SelProduct.select_by_index(0)
         SelscrType =Select(Browser.find_element_by_id("product-operator"))
         SelscrType.select_by_index(0)
         Browser.find_element_by_id("txt-product-search").send_keys("SNN")
         WebDriverWait(Browser,30).until(EC.element_to_be_clickable((By.XPATH,"//*[@id='product']/tbody/tr[2]/td[1]/input")), "Waiting for Product search window")
+        sleep(3)
         Browser.find_element_by_xpath("//*[@id='product']/tbody/tr[2]/td[1]/input").click()
+        ProductDetails = str(Browser.find_element_by_xpath("/html/body/div[1]/div[3]/div[3]/div[1]/div[2]/table/tbody/tr[2]").get_attribute("innerText"))
         fn_CaptureScreenShot("Pass", "Clicked on send item in the product search")
         
         assert True
+        return ProductDetails
     except Exception as e:
         print(e)
         fn_CaptureScreenShot("Fail", "Failed in product search {}".format(e))
         assert False
-        
+
+
 @allure.step("Click on Add Checked & close button")
 def fn_ClickAddCheckClose():
     try:
         winName = getWindowName()
-        Browser.find_element_by_xpath("//div[@id='alertJs-tdDialogFooter']/button[3]").click()
-        
         Browser.switch_to.window(winName[0])
+        Browser.find_element_by_xpath("//div[@id='alertJs-tdDialogFooter']/button[3]").click()
+        fn_CaptureScreenShot("Pass","Clicking on Add checked & close button")
+        
     except Exception as e:
         print(e)
+
+@allure.step("Verify product name in the grid")
+def fn_verifyProductName(ProdName):
+    try:
+        ProdName = str(ProdName).strip()
+        WebDriverWait(Browser,30).until(EC.frame_to_be_available_and_switch_to_it((By.XPATH,'//*[@id="WebResource_QuoteProductGrid"]')), "Waiting for Product to load in grid")
+        WebDriverWait(Browser,30).until(EC.visibility_of_element_located((By.XPATH,'//*[@id="example"]/tbody')), "Waiting for Product to load in grid")
         
+        rowCnt = int(Browser.find_element_by_xpath('//*[@id="example"]/tbody').get_attribute("childElementCount"))
+        lstProdList =[]
+        
+        for i in range(3,rowCnt):
+            rowxpath = '/html/body/div/div[2]/table/tbody/tr[{}]'.format(i)                                    
+            lstRow = Browser.find_element_by_xpath(rowxpath).get_attribute("innerText")
+            lstProdList.append(lstRow)
+        print(lstProdList)
+#         fltProdLst = list(filter(lambda ProdName : len(ProdName)>0 , lstProdList))
+#         print (list(fltProdLst))
+        intTotalAmt =0.00
+        for row in list(lstProdList):
+            arrRow = row.split("\t")
+            if str(arrRow[3]) =='TCS TCSCONTADMINFEE':
+                continue
+            
+            fltProfitAge = str(arrRow[10]).replace(',','')
+            fltProfitAge = 1.00- float(fltProfitAge)/100
+            intSelPrice = str(arrRow[7]).replace(',','')
+            arrSelPrice = intSelPrice.split("$")
+            fltCost = str(arrRow[8]).replace(',','')
+            arrCost = fltCost.split("$")
+            fltSellPrice = round(float(arrCost[1])/fltProfitAge,2)
+            print(arrSelPrice[1],fltSellPrice)
+            if float(arrSelPrice[1]) == fltSellPrice:
+                fn_rptStepDetails("Pass", "Actual Amount {} Expected Amount {}".format(arrSelPrice[1],fltSellPrice))
+            else:
+                fn_rptStepDetails("Fail", "Actual Amount {} Expected Amount {}".format(arrSelPrice[1],fltSellPrice))
+            intTotalAmt =intTotalAmt+float(arrSelPrice[1])
+        print(intTotalAmt)
+        winName = getWindowName()
+        Browser.switch_to.window(winName[0])
+        getTax =fn_getTaxDetails()
+        fltGrandTotal = round(intTotalAmt +(intTotalAmt *(getTax/100)),2)
+        print(fltGrandTotal)
+        
+    except Exception as e:
+        print(e)
+    
+@allure.step("Get Tax details")
+def fn_getTaxDetails():
+    try:
+        WebDriverWait(Browser,30).until(EC.visibility_of_element_located((By.XPATH,'//*[@title="Details"]')), "Waiting for Details tab to load..")
+        Browser.find_element_by_xpath('//*[@title="Details"]').click()
+        fltTaxRate = Browser.find_element_by_xpath('//input[@id="id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-93-troxcdi_taxrate6-troxcdi_taxrate.fieldControl-decimal-number-text-input"]').get_attribute("value")
+        fn_rptStepDetails("Pass", "Tax rate {}".format(fltTaxRate))
+        return float(fltTaxRate)
+# 
+    except Exception as e:
+        print(e)
+    
+@allure.step("Get Total Amount from header")
+def fn_getTotalAmountHeader():
+    try:
+        WebDriverWait(Browser,30).until(EC.visibility_of_element_located((By.XPATH,'//*[@id="headerControlsList"]/div[1]/div[1]/div[1]')), "Waiting for Total Amount on header..")
+        getTotalAmount=Browser.find_element_by_xpath('//*[@id="headerControlsList"]/div[1]/div[1]/div[1]').get_attribute("innerText")
+        arrTotalAmount = getTotalAmount.split("$")
+        return float(arrTotalAmount[1])
+    except Exception as e:
+        print(e)
+
+#     
+
     
