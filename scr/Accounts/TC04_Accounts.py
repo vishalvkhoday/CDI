@@ -28,6 +28,7 @@ def test_LeftPanel ():
         fn_ClickQuotesLink()
         fn_CaptureScreenShot("Pass", "Completed !!!")
         fn_closeBrowser()
+        
         assert True
     except:
         fn_CaptureScreenShot("Fail", "Unknown error look for error in report")

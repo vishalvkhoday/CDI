@@ -26,10 +26,12 @@ def ChromeDriver():
         WebOptions = webdriver.ChromeOptions()
         WebOptions.add_argument("start-maximized")
         WebOptions.add_argument("disable-infobars")
-        driver = webdriver.Chrome(executable_path="C:/Users/DELL/git/Selenium_NSE_Algo/Additonal_Utility/chromedriver", options=WebOptions,service_args=["--verbose", "--log-path=../../Log/ExecutionLogs.log"])
-#         driver = webdriver.Chrome(executable_path="C:/Users/DELL/eclipse-workspace/CDI/WebDriver/chromedriver", chrome_options=WebOptions,service_args=["--verbose", "--log-path=../../Log/ExecutionLogs.log"])
+#         driver = webdriver.Chrome(executable_path="C:/Users/DELL/git/Selenium_NSE_Algo/Additonal_Utility/chromedriver", options=WebOptions,service_args=["--verbose", "--log-path=../../Log/ExecutionLogs.log"])
+        driver = webdriver.Chrome(executable_path="C:/Users/DELL/git/Selenium_NSE_Algo/Additonal_Utility/chromedriver", chrome_options=WebOptions,service_args=["--verbose", "--log-path=../../Log/ExecutionLogs.log"])
         return driver
-    except:
+    except Exception as e:
+        print(e)
+        
         assert False
 Browser =ChromeDriver()
 
@@ -47,7 +49,7 @@ def fn_objExist(brwObj):
     intcount =0
     while True:
         try:
-            if brwObj.is_displayed() or brwObj.is_enabled() == True:
+            if brwObj.is_displayed() == True or brwObj.is_enabled() == True:
                 brwObj.location_once_scrolled_into_view                
                 fn_rptStepDetails("Pass","Object exist on page {}".format(brwObj))
                 break
@@ -128,24 +130,27 @@ def LaunchBrowser():
 
         assert len(winName[0])>0
     except Exception as e:
+        print(e)
         fn_CaptureScreenShot("Fail", "Failed in Launch browser function {}".format(e))
         assert False
         
 @allure.step("Clicked on Accounts link on left panel")
-def fn_NavigateTo_AccountsPage():
+def fn_Search_n_Navigate_Accounts_Page(strAccountName):
     try:
-        fn_rptStepDetails("Pass", "Navigate Account page function started ************")
-        WebDriverWait(Browser,120).until(EC.element_to_be_clickable((By.XPATH,"//*[@id='sitemap-entity-New_Account']/div[1]")))
-        fn_objExist(Browser.find_element_by_xpath("//*[@id='sitemap-entity-New_Account']/div[1]"))
-        Browser.find_element_by_xpath("//*[@id='sitemap-entity-New_Account']/div[1]").click()
-        sleep(10)
+        #Turntable Testing Company
+#         fn_rptStepDetails("Pass", "Navigate Account page function started ************")
+#         WebDriverWait(Browser,120).until(EC.element_to_be_clickable((By.XPATH,"//*[@id='sitemap-entity-New_Account']/div[1]")))
+#         fn_objExist(Browser.find_element_by_xpath("//*[@id='sitemap-entity-New_Account']/div[1]"))
+#         Browser.find_element_by_xpath("//*[@id='sitemap-entity-New_Account']/div[1]").click()
+#         sleep(10)
+        fn_ClickAccountsLink()
         WebDriverWait(Browser,120).until(EC.element_to_be_clickable((By.ID,"quickFind_text_1")))
         fn_objExist(Browser.find_element_by_id("quickFind_text_1"))
-        Browser.find_element_by_id("quickFind_text_1").send_keys("Turntable Testing")
+        Browser.find_element_by_id("quickFind_text_1").send_keys(strAccountName)
         Browser.find_element_by_id("quickFind_button_1").click()
-        WebDriverWait(Browser,120).until(EC.element_to_be_clickable((By.PARTIAL_LINK_TEXT,"Turntable Testing Company")))
-        fn_objExist(Browser.find_element_by_partial_link_text("Turntable Testing Company"))
-        Browser.find_element_by_partial_link_text("Turntable Testing Company").click()
+        WebDriverWait(Browser,120).until(EC.element_to_be_clickable((By.PARTIAL_LINK_TEXT,strAccountName)))
+        fn_objExist(Browser.find_element_by_partial_link_text(strAccountName))
+        Browser.find_element_by_partial_link_text(strAccountName).click()
         fn_CaptureScreenShot("Pass", "Accounts page after click on account link")
         assert True
     except Exception as e:
@@ -153,8 +158,7 @@ def fn_NavigateTo_AccountsPage():
         assert False
 
 @allure.step("Clicked on Quote link in left panel")
-def fn_NavigateTo_QuotesPage():
-    
+def fn_NavigateTo_QuotesPage():    
     fn_rptStepDetails("Pass", "Quote function started")
     WebDriverWait(Browser,130).until(EC.element_to_be_clickable((By.XPATH,"//*[@id='sitemap-entity-Home_8E2112DC-AD90-40F5-BEBE-0A8D80785D75']/div")), "Clicked on Home icone")
     WebDriverWait(Browser,120).until(EC.element_to_be_clickable((By.XPATH,"//*[@id='sitemap-entity-NewSubArea_f171d33']/div[1]")), "Quotes link Clicked")
@@ -165,9 +169,9 @@ def fn_NavigateTo_QuotesPage():
 def fn_ClickOnNewQuote():
     try:        
         fn_rptStepDetails("Pass", "Click on new quote button on header")
-        WebDriverWait(Browser,130).until(EC.element_to_be_clickable((By.XPATH,"//*[@id='dataSetRoot_3']/div/div/div/ul/li[2]/button[1]")), "Waiting for Quote Icon")
-        fn_objExist(Browser.find_element_by_xpath("//*[@id='dataSetRoot_3']/div/div/div/ul/li[2]/button[1]"))
-        Browser.find_element_by_xpath("//*[@id='dataSetRoot_3']/div/div/div/ul/li[2]/button[1]").click()
+        WebDriverWait(Browser,60).until(EC.element_to_be_clickable((By.XPATH,"//*[@data-id='quote|NoRelationship|HomePageGrid|Mscrm.HomepageGrid.quote.NewRecord']")), "Waiting for Quote Icon")
+        fn_objExist(Browser.find_element_by_xpath("//*[@data-id='quote|NoRelationship|HomePageGrid|Mscrm.HomepageGrid.quote.NewRecord']"))
+        Browser.find_element_by_xpath("//*[@data-id='quote|NoRelationship|HomePageGrid|Mscrm.HomepageGrid.quote.NewRecord']").click()
         fn_CaptureScreenShot("Pass", "After click on new quote button")
     except:
         fn_CaptureScreenShot("Fail","Failed to click on New Quote")
@@ -228,8 +232,12 @@ def fn_EnterQuoteSummaryInfo():
         fn_CaptureScreenShot("Fail", "Error while entering quote details {}".format(e))
         
 @allure.step("Click on Save button on header")    
-def fn_Click_Save_OnHeader():    
-    Browser.find_element_by_xpath("//*[@id='quote|NoRelationship|Form|Mscrm.SavePrimary12']/button").click()
+def fn_Click_Save_OnHeader():
+    try:
+        WebDriverWait(Browser,30).until(EC.element_to_be_clickable((By.XPATH,"//*[@id='quote|NoRelationship|Form|Mscrm.SavePrimary02']/button")), "Waiting for Save button to appear on header")
+        Browser.find_element_by_xpath("//*[@id='quote|NoRelationship|Form|Mscrm.SavePrimary02']/button").click()
+    except Exception as e:
+        fn_rptStepDetails("Fail", "Failed to click Save button on header with exception {}".format(e))
     
 @allure.step("Browser Closed")
 def fn_closeBrowser():
@@ -237,67 +245,105 @@ def fn_closeBrowser():
     
 @allure.step("Clicked on Home link in left panel")
 def fn_ClickHomeLink():
-    Browser.find_element_by_xpath("(//*[@title='Go to home page'])[1]").click()
-    WebDriverWait(Browser,130).until(EC.visibility_of_element_located((By.XPATH,"//span[@id='Dashboard_Selector_3486372d-7988-474d-9cf8-8e94504554ef_text-value']")), "Waiting for Home page")
-    fn_objExist(Browser.find_element_by_xpath("//span[@id='Dashboard_Selector_3486372d-7988-474d-9cf8-8e94504554ef_text-value']"))
-    
+    try:        
+        WebDriverWait(Browser,130).until(EC.element_to_be_clickable((By.XPATH,"(//*[@title='Go to home page'])[1]")), "Waiting for Home page")
+        Browser.find_element_by_xpath("(//*[@title='Go to home page'])[1]").click()
+        
+    except Exception as e:
+        fn_rptStepDetails("Fail", "Failed to click on home link in left panel with error {}".format(e))
 
 @allure.step("Clicked on Recent link in left panel")
 def fn_ClickRecentLink():
-    Browser.find_element_by_xpath("(//*[@title='Recent items'])[1]").click()
-    
+    try:
+        WebDriverWait(Browser,40).until(EC.element_to_be_clickable((By.XPATH,"(//*[@title='Recent items'])[1]")), "Waiting for Recent items page")
+        Browser.find_element_by_xpath("(//*[@title='Recent items'])[1]").click()
+    except Exception as e:
+        fn_rptStepDetails("Fail", "Failed to click on Recent link with error {}".format(e))
 
 @allure.step("Clicked on Dashboards link in left panel")
 def fn_ClickDashboardsLink():
-    Browser.find_element_by_xpath("(//*[@title='Dashboards'])[1]").click()
-    WebDriverWait(Browser,130).until(EC.visibility_of_element_located((By.XPATH,"//span[contains(text(),'Trox Field Sales Dashboard')]")), "Waiting for Home page")
-    fn_objExist(Browser.find_element_by_xpath("//span[contains(text(),'Trox Field Sales Dashboard')]"))
-
+    try:
+        WebDriverWait(Browser,40).until(EC.element_to_be_clickable((By.XPATH,"(//*[@title='Dashboards'])[1]")), "Waiting for Recent items page")
+        Browser.find_element_by_xpath("(//*[@title='Dashboards'])[1]").click()
+        WebDriverWait(Browser,10).until(EC.visibility_of_element_located((By.XPATH,"(//span[contains(text(),'Trox Field Sales Dashboard')])[2]")), "Waiting for Home page")
+        fn_objExist(Browser.find_element_by_xpath("//span[contains(text(),'Trox Field Sales Dashboard')]"))
+        fn_rpts_StepWith_Screenshot("Pass", "Clicked on DashBoard link in left panel")
+    except Exception as e:
+        fn_rptStepDetails("Fail", "Failed to click on Dashboard link Error {}".format(e))
+        
 @allure.step("Clicked on Dashboards link in left panel")
 def fn_ClickActivitiesLink():
-    Browser.find_element_by_xpath("(//*[@title='Activities'])[1]").click()
-    WebDriverWait(Browser,130).until(EC.visibility_of_element_located((By.XPATH,"//span[contains(text(),'My Activities')]")), "Waiting for Activities page")
-    fn_objExist(Browser.find_element_by_xpath("//span[contains(text(),'My Activities')]"))
-
+    try:
+        WebDriverWait(Browser,40).until(EC.element_to_be_clickable((By.XPATH,"(//*[@title='Activities'])[1]")), "Waiting for Activities items page")
+        Browser.find_element_by_xpath("(//*[@title='Activities'])[1]").click()
+        WebDriverWait(Browser,100).until(EC.visibility_of_element_located((By.XPATH,"(//span[contains(text(),'My Activities')])[2]")), "Waiting for Activities page")
+        fn_objExist(Browser.find_element_by_xpath("(//span[contains(text(),'My Activities')])[2]"))
+        fn_rpts_StepWith_Screenshot("Pass", "Clicked on Activities link")
+    except Exception as e:
+        fn_rptStepDetails("Fail", "Failed to click on Activities link error {}".format(e))
+        
 @allure.step("Clicked on Accounts link in left panel")
 def fn_ClickAccountsLink():
-    Browser.find_element_by_xpath("(//*[@title='Accounts'])[1]").click()
-    WebDriverWait(Browser,130).until(EC.visibility_of_element_located((By.XPATH,"//span[contains(text(),'My Accounts')]")), "Waiting for Home page")
-    fn_objExist(Browser.find_element_by_xpath("//span[contains(text(),'My Accounts')]"))
-
+    try:        
+        WebDriverWait(Browser,40).until(EC.element_to_be_clickable((By.XPATH,"(//*[@title='Accounts'])[1]")), "Waiting for Accounts page")
+        Browser.find_element_by_xpath("(//*[@title='Accounts'])[1]").click()
+        WebDriverWait(Browser,100).until(EC.visibility_of_element_located((By.XPATH,"(//span[contains(text(),'My Accounts')])[2]")), "Waiting for Home page")
+#         fn_objExist(Browser.find_element_by_xpath("(//span[contains(text(),'My Accounts')])[2]"))
+        fn_rpts_StepWith_Screenshot("Pass", "Clicked on Accounts link")
+    except Exception as e:
+        fn_rptStepDetails("Fail", "Failed to click on Account link error {}".format(e))
+        
 @allure.step("Clicked on Contacts link in left panel")
 def fn_ClickContactsLink():
-    Browser.find_element_by_xpath("(//*[@title='Contacts'])[1]").click()
-    WebDriverWait(Browser,130).until(EC.visibility_of_element_located((By.XPATH,"//span[contains(text(),'My Active Contacts')]")), "Waiting for Contacts page")
-    fn_objExist(Browser.find_element_by_xpath("//span[contains(text(),'My Active Contacts')]"))
-    
+    try:
+        WebDriverWait(Browser,40).until(EC.element_to_be_clickable((By.XPATH,"(//*[@title='Contacts'])[1]")), "Waiting for Contacts page")
+        Browser.find_element_by_xpath("(//*[@title='Contacts'])[1]").click()
+        try:
+            WebDriverWait(Browser,20).until(EC.visibility_of_element_located((By.XPATH,"(//span[contains(text(),'My Active Contacts')])[1]")), "Waiting for Contacts page")
+        except:
+            WebDriverWait(Browser,20).until(EC.visibility_of_element_located((By.XPATH,"(//span[contains(text(),'My Active Contacts')])[2]")), "Waiting for Contacts page")
+#         fn_objExist(Browser.find_element_by_xpath("(//span[contains(text(),'My Active Contacts')])[2]"))
+        fn_CaptureScreenShot("Pass", "Clicked on Contact link")
+    except Exception as e:
+        fn_rptStepDetails("Fail", "Failed to click on contact link with error {}".format(e))
+        
 @allure.step("Clicked on Opportunity link in left panel")
 def fn_ClickOpportunitiesLink():
-    Browser.find_element_by_xpath("(//*[@title='Opportunities'])[1]").click()
-    WebDriverWait(Browser,130).until(EC.visibility_of_element_located((By.XPATH,"//span[contains(text(),'My Open Opportunities')]")), "Waiting for Opportunities page")
-    fn_objExist(Browser.find_element_by_xpath("//span[contains(text(),'My Open Opportunities')]"))
+    try:
+        WebDriverWait(Browser,40).until(EC.element_to_be_clickable((By.XPATH,"(//*[@title='Opportunities'])[1]")), "Waiting for Contacts page")
+        Browser.find_element_by_xpath("(//*[@title='Opportunities'])[1]").click()
+        WebDriverWait(Browser,100).until(EC.visibility_of_element_located((By.XPATH,"(//span[contains(text(),'My Open Opportunities')])[2]")), "Waiting for Opportunities page")
+#         fn_objExist(Browser.find_element_by_xpath("(//span[contains(text(),'My Open Opportunities')])[2]"))
+        fn_CaptureScreenShot("Pass", "Clicked on Opportunities link")
+    except Exception as e:
+        fn_rptStepDetails("Fail", "Failed to click on Opportunity Error {}".format(e))
     
 @allure.step("Clicked on Quotes link in left panel")
 def fn_ClickQuotesLink():
-    Browser.find_element_by_xpath("(//*[@title='Quotes'])[1]").click()
-    WebDriverWait(Browser,130).until(EC.visibility_of_element_located((By.XPATH,"//span[@class='pa-bv pa-e pa-cp ']")), "Waiting for My Quotes page")
-    fn_objExist(Browser.find_element_by_xpath("//span[@class='pa-bv pa-e pa-cp ']"))
-
+    try:
+        WebDriverWait(Browser,40).until(EC.element_to_be_clickable((By.XPATH,"(//*[@title='Quotes'])[1]")), "Waiting for Contacts page")
+        Browser.find_element_by_xpath("(//*[@title='Quotes'])[1]").click()
+        WebDriverWait(Browser,100).until(EC.visibility_of_element_located((By.XPATH,"//span[@class='pa-bv pa-e pa-cp ']")), "Waiting for My Quotes page")
+        fn_objExist(Browser.find_element_by_xpath("//span[@class='pa-bv pa-e pa-cp ']"))
+        fn_CaptureScreenShot("Pass", "Clicked on Quote link")
+    except Exception as e:
+        fn_rptStepDetails("Fail", "Failed to click on Quote link with exception {}".format(e))
 
 @allure.step("Click on Product tab in quote page")
 def fn_ClickProductTab():
     try:
+        WebDriverWait(Browser,130).until(EC.element_to_be_clickable((By.XPATH,"//li[@title='Products']")), "Waiting for product tab to be enabled")
         Browser.find_element_by_xpath("//li[@title='Products']").click()
         assert True
     except Exception as e:
-        print(e)
+        fn_rptStepDetails("Fail", "Failed to click on Product tab with exception {}".format(e))
         assert False
         
 @allure.step("Click on Add Product button")
 def fn_ClickAddProductBtn():
     try:
 #         WebDriverWait(Browser,30).until(EC.visibility_of_element_located((By.XPATH,"//iframe[@id='WebResource_QuoteProductGrid']")), "Waiting for Product button")
-        WebDriverWait(Browser,30).until(EC.frame_to_be_available_and_switch_to_it(Browser.find_element_by_xpath("//iframe[@id='WebResource_QuoteProductGrid']")))
+        WebDriverWait(Browser,40).until(EC.frame_to_be_available_and_switch_to_it(Browser.find_element_by_xpath("//iframe[@id='WebResource_QuoteProductGrid']")))
 #         iframeProduct = Browser.find_element_by_xpath("//iframe[@id='WebResource_QuoteProductGrid']")
 #         sleep(1)
 #         Browser.switch_to.frame(iframeProduct)
@@ -348,6 +394,33 @@ def fn_ClickAddCheckClose():
     except Exception as e:
         print(e)
 
+
+@allure.step("Verify Accounts page...")
+def fn_verifyAccountsPage(strAccountName):  
+    try:
+          
+        WebDriverWait(Browser,130).until(EC.visibility_of_element_located((By.XPATH,'//h1[@id="formHeaderTitle_2"]')), "Waiting for Accounts page to load")
+        strHeaderAccount = Browser.find_element_by_xpath('//h1[@id="formHeaderTitle_2"]').get_attribute("innerText")
+        arrAccountName= strAccountName.split(" ")
+        if str(strHeaderAccount).find(arrAccountName[0])>=0:
+            fn_rptStepDetails("Pass", "Account name partial match Actual {} Exepected {}".format(strHeaderAccount,str(arrAccountName[0])))
+        else:
+            fn_rptStepDetails("Fail", "Account name partial does match Actual {} Exepected {}".format(strHeaderAccount,str(arrAccountName[0])))
+        
+        fn_objExist(Browser.find_element_by_xpath('//h2[@title="Account Information"]'))
+        fn_objExist(Browser.find_element_by_xpath('//li[@title="Activities"]'))
+        fn_objExist(Browser.find_element_by_xpath('//li[@title="Assets and Locations"]'))
+        fn_objExist(Browser.find_element_by_xpath('//li[@title="Insights"]'))
+        fn_objExist(Browser.find_element_by_xpath('//li[@title="Contacts"]'))
+        fn_objExist(Browser.find_element_by_xpath('//li[@title="Quotes"]'))
+        fn_objExist(Browser.find_element_by_xpath('//li[@title="Opportunities"]'))
+        fn_objExist(Browser.find_element_by_xpath('//li[@title="Shipping"]'))
+        fn_objExist(Browser.find_element_by_xpath('//li[@title="Child Accounts"]'))
+        
+    except Exception as e:
+        fn_rptStepDetails("Fail", "Error in Account verification {}".format(e))
+    
+    
 @allure.step("Verify product name in the grid")
 def fn_verifyProductName(ProdName):
     try:
@@ -416,3 +489,32 @@ def fn_getTotalAmountHeader():
     except Exception as e:
         print(e)
 
+@allure.step("Search for contact in contact page")
+def fn_SearchContact(strContactName):
+    try:
+        WebDriverWait(Browser,30).until(EC.visibility_of_element_located((By.ID,"quickFind_text_1")), "Contact page to load")
+        Browser.find_element_by_id("quickFind_text_1").send_keys(strContactName)
+        sleep(1)
+        Browser.find_element_by_id("quickFind_button_1").click()
+        try:
+            WebDriverWait(Browser,30).until(EC.element_to_be_clickable((By.XPATH,"//*[@class='wj-cell'] [@data-id='cell-0-2']")), "Wait for contact to load")
+        except:
+            pass
+        strContactName =Browser.find_element_by_xpath("//*[@class='wj-cell'] [@data-id='cell-0-2']").get_attribute("innerText")
+        Browser.find_element_by_xpath("//*[@class='wj-cell'] [@data-id='cell-0-2']").click()
+        WebDriverWait(Browser,30).until(EC.visibility_of_element_located((By.XPATH,"//h1[@id='formHeaderTitle_2']")), "Waiting for contact details form to load")
+        strFullName = Browser.find_element_by_xpath("//h1[@id='formHeaderTitle_2']").get_attribute("innerText")
+        
+        if strContactName == strFullName:
+            fn_rptStepDetails("Pass", "Contact opened desired name Actual {} Expected {} ".format(strContactName,strFullName))
+        
+    except Exception as e:
+        fn_rptStepDetails("Fail", "Error in contact page with error {}".format(e))
+    
+    
+    
+    
+    
+    
+    
+    
