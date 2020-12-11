@@ -10,15 +10,16 @@ from time import sleep
 import random
 from datetime import date
 
-
+@allure.severity(severity_level="CRITICAL")
+@allure.story("This is left panel Navigation test")
 @allure.title("Validate all links in left panel")
-def test_CreateQuote ():
+def test_LeftPanelNavigation ():
     try:
         LaunchBrowser()
         fn_CaptureScreenShot("Pass","After Browser Launch")
         sleep(2)
         fn_ClickHomeLink()
-#         fn_ClickRecentLink()
+        fn_ClickRecentLink()
         fn_ClickDashboardsLink()
         fn_ClickActivitiesLink()
         fn_ClickAccountsLink()

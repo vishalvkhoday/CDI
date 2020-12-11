@@ -21,9 +21,7 @@ def test_Accounts ():
         fn_rptStepDetails("Pass", "Browser Launched Successfully")
         sleep(2)
         fn_rptStepDetails("Pass", "Before navigating to Accounts page")
-        fn_rptTC_Title("Before navigating to Accounts page")
         fn_Search_n_Navigate_Accounts_Page(strAccountName)
-        fn_rptTC_Title("After navigating to Accounts page")
         fn_NavigateTo_QuotesPage()
         fn_CaptureScreenShot("Pass", "Quote page navigation completed!!!")
         sleep(5)
@@ -31,7 +29,7 @@ def test_Accounts ():
 #         fn_VerifyQuotePage()
         sleep(5)
         fn_EnterQuoteSummaryInfo()
-        sleep(random.randint(0,15))
+        
         fn_CaptureScreenShot("Pass", "Completed !!!")
         assert True
         fn_closeBrowser()

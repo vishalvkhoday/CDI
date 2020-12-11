@@ -42,6 +42,7 @@ def fn_CaptureScreenShot(Res,Desc):
         fn_rpts_StepWith_Screenshot(Res,Desc)
         assert True
     except Exception as e:
+        
         fn_rpts_StepWith_Screenshot("Fail","Unable to capture Screen shot... {}".format(e))
 #         assert False
 
@@ -61,7 +62,7 @@ def fn_objExist(brwObj):
                 else:
                     fn_rptStepDetails("Pass","Waiting for object to load.....")
         except NoSuchElementException as e:
-                sleep(3)
+                pass
                 intcount =intcount+1
                 if intcount >= 15:
                     break
@@ -196,19 +197,31 @@ def fn_EnterQuoteSummaryInfo():
         Browser.find_element_by_xpath("//*[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-3-name6-name.fieldControl-text-box-text']").clear()
         Browser.find_element_by_xpath("//*[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-3-name6-name.fieldControl-text-box-text']").send_keys(strQuoteName)
         sleep(2)
-        
+#         WebDriverWait(Browser,20).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-9-customerid8-customerid.fieldControl-LookupResultsDropdown_customerid_1_resultsContainer_0_0"]')), "Waiting for Summary Tab")
+
         # select account
         Browser.find_element_by_xpath('//*[@data-id="customerid.fieldControl-LookupResultsDropdown_customerid_textInputBox_with_filter_new"]').click()
-        WebDriverWait(Browser,10).until(EC.presence_of_all_elements_located((By.XPATH,'//*[@id="id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-9-customerid8-customerid.fieldControl-LookupResultsDropdown_customerid_1_resultsLabel_0_0"]')), "Waiting for Account Lookup values to appear")
-        Browser.find_element_by_xpath('//*[@id="id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-9-customerid8-customerid.fieldControl-LookupResultsDropdown_customerid_1_resultsLabel_0_0"]').click()
-                        
-                        
+        Browser.find_element_by_xpath('//*[@data-id="customerid.fieldControl-LookupResultsDropdown_customerid_textInputBox_with_filter_new"]').send_keys("Turntable Testing Company")
+        WebDriverWait(Browser,20).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-9-customerid8-customerid.fieldControl-LookupResultsDropdown_customerid_1_resultsContainer_0_0"]')), "Waiting for Summary Tab")
+        ActionChains(Browser).key_down(Keys.ENTER).perform()
+        sleep(1)
+        
+        ActionChains(Browser).key_down(Keys.DOWN).perform()
+        sleep(1)
+        ActionChains(Browser).key_down(Keys.ENTER).perform()
+        
 #           Enter contact name        
         Browser.find_element_by_xpath("//*[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-13-troxcdi_contactname8-troxcdi_contactname.fieldControl-LookupResultsDropdown_troxcdi_contactname_2_textInputBox_with_filter_new']").click()
         Browser.find_element_by_xpath("//*[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-13-troxcdi_contactname8-troxcdi_contactname.fieldControl-LookupResultsDropdown_troxcdi_contactname_2_textInputBox_with_filter_new']").clear()
-        Browser.find_element_by_xpath("//*[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-13-troxcdi_contactname8-troxcdi_contactname.fieldControl-LookupResultsDropdown_troxcdi_contactname_2_textInputBox_with_filter_new']").send_keys('Vishal khoday ')
+        Browser.find_element_by_xpath("//*[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-13-troxcdi_contactname8-troxcdi_contactname.fieldControl-LookupResultsDropdown_troxcdi_contactname_2_textInputBox_with_filter_new']").send_keys('Vishal khoday')
         WebDriverWait(Browser,30).until(EC.element_to_be_clickable((By.XPATH,"//*[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-13-troxcdi_contactname8-troxcdi_contactname.fieldControl-LookupResultsDropdown_troxcdi_contactname_2_resultsContainer_0_0']")),"Waiting for Contact lookup values to appear")
-        Browser.find_element_by_xpath("//*[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-13-troxcdi_contactname8-troxcdi_contactname.fieldControl-LookupResultsDropdown_troxcdi_contactname_2_resultsContainer_0_0']").click()               
+#         Browser.find_element_by_xpath("//*[@id='id-c7a4eb13-1549-ea11-a812-000d3a5a11b0-13-troxcdi_contactname8-troxcdi_contactname.fieldControl-LookupResultsDropdown_troxcdi_contactname_2_resultsContainer_0_0']").click()
+        ActionChains(Browser).key_down(Keys.ENTER).perform()
+        sleep(1)
+        ActionChains(Browser).key_down(Keys.DOWN).perform()
+        sleep(1)
+        ActionChains(Browser).key_down(Keys.ENTER).perform()
+                       
     #      Enter account name
 #         WebDriverWait(Browser,30).until(EC.element_to_be_clickable((By.XPATH,"//input[@data-id='troxcdi_contactname.fieldControl-LookupResultsDropdown_troxcdi_contactname_textInputBox_with_filter_new']")), "Waiting for Account Lookup values to appear")
 #         Browser.find_element_by_xpath("//input[@data-id='troxcdi_contactname.fieldControl-LookupResultsDropdown_troxcdi_contactname_textInputBox_with_filter_new']").click()
@@ -229,6 +242,7 @@ def fn_EnterQuoteSummaryInfo():
         Browser.find_element_by_xpath("//button[@class='msos-caret-button']").click()
                    
     except Exception as e:
+        print(e)
         fn_CaptureScreenShot("Fail", "Error while entering quote details {}".format(e))
         
 @allure.step("Click on Save button on header")    
@@ -248,7 +262,6 @@ def fn_ClickHomeLink():
     try:        
         WebDriverWait(Browser,130).until(EC.element_to_be_clickable((By.XPATH,"(//*[@title='Go to home page'])[1]")), "Waiting for Home page")
         Browser.find_element_by_xpath("(//*[@title='Go to home page'])[1]").click()
-        
     except Exception as e:
         fn_rptStepDetails("Fail", "Failed to click on home link in left panel with error {}".format(e))
 
@@ -265,20 +278,24 @@ def fn_ClickDashboardsLink():
     try:
         WebDriverWait(Browser,40).until(EC.element_to_be_clickable((By.XPATH,"(//*[@title='Dashboards'])[1]")), "Waiting for Recent items page")
         Browser.find_element_by_xpath("(//*[@title='Dashboards'])[1]").click()
-        WebDriverWait(Browser,10).until(EC.visibility_of_element_located((By.XPATH,"(//span[contains(text(),'Trox Field Sales Dashboard')])[2]")), "Waiting for Home page")
+        WebDriverWait(Browser,10).until(EC.visibility_of_element_located((By.XPATH,"(//span[contains(text(),'Trox Field Sales Dashboard')])[1]")), "Waiting for Home page")
         fn_objExist(Browser.find_element_by_xpath("//span[contains(text(),'Trox Field Sales Dashboard')]"))
-        fn_rpts_StepWith_Screenshot("Pass", "Clicked on DashBoard link in left panel")
+        fn_CaptureScreenShot("Pass", "Clicked on DashBoard link in left panel")
     except Exception as e:
         fn_rptStepDetails("Fail", "Failed to click on Dashboard link Error {}".format(e))
         
-@allure.step("Clicked on Dashboards link in left panel")
+@allure.step("Clicked on Activities link in left panel")
 def fn_ClickActivitiesLink():
     try:
         WebDriverWait(Browser,40).until(EC.element_to_be_clickable((By.XPATH,"(//*[@title='Activities'])[1]")), "Waiting for Activities items page")
+        Browser.find_element_by_xpath("(//*[@title='Activities'])[1]").location_once_scrolled_into_view
         Browser.find_element_by_xpath("(//*[@title='Activities'])[1]").click()
-        WebDriverWait(Browser,100).until(EC.visibility_of_element_located((By.XPATH,"(//span[contains(text(),'My Activities')])[2]")), "Waiting for Activities page")
-        fn_objExist(Browser.find_element_by_xpath("(//span[contains(text(),'My Activities')])[2]"))
-        fn_rpts_StepWith_Screenshot("Pass", "Clicked on Activities link")
+        try:
+            WebDriverWait(Browser,40).until(EC.visibility_of_element_located((By.XPATH,"(//span[contains(text(),'My Activities')])[2]")), "Waiting for Activities page")
+            fn_objExist(Browser.find_element_by_xpath("(//span[contains(text(),'My Activities')])[2]"))
+        except:
+            fn_objExist(Browser.find_element_by_xpath("(//span[contains(text(),'My Activities')])[1]"))
+        fn_CaptureScreenShot("Pass", "Clicked on Activities link")
     except Exception as e:
         fn_rptStepDetails("Fail", "Failed to click on Activities link error {}".format(e))
         
@@ -287,22 +304,29 @@ def fn_ClickAccountsLink():
     try:        
         WebDriverWait(Browser,40).until(EC.element_to_be_clickable((By.XPATH,"(//*[@title='Accounts'])[1]")), "Waiting for Accounts page")
         Browser.find_element_by_xpath("(//*[@title='Accounts'])[1]").click()
-        WebDriverWait(Browser,100).until(EC.visibility_of_element_located((By.XPATH,"(//span[contains(text(),'My Accounts')])[2]")), "Waiting for Home page")
-#         fn_objExist(Browser.find_element_by_xpath("(//span[contains(text(),'My Accounts')])[2]"))
-        fn_rpts_StepWith_Screenshot("Pass", "Clicked on Accounts link")
+        Browser.find_element_by_xpath("(//*[@title='Accounts'])[1]").location_once_scrolled_into_view
+        try:
+            WebDriverWait(Browser,20).until(EC.visibility_of_element_located((By.XPATH,"(//span[contains(text(),'My Accounts')])[2]")), "Waiting for Home page")
+            fn_objExist(Browser.find_element_by_xpath("(//span[contains(text(),'My Accounts')])[2]"))
+        except:
+            fn_objExist(Browser.find_element_by_xpath("(//span[contains(text(),'My Accounts')])[1]"))
+        fn_CaptureScreenShot("Pass", "Clicked on Accounts link")
     except Exception as e:
         fn_rptStepDetails("Fail", "Failed to click on Account link error {}".format(e))
         
 @allure.step("Clicked on Contacts link in left panel")
 def fn_ClickContactsLink():
     try:
-        WebDriverWait(Browser,40).until(EC.element_to_be_clickable((By.XPATH,"(//*[@title='Contacts'])[1]")), "Waiting for Contacts page")
+        WebDriverWait(Browser,140).until(EC.element_to_be_clickable((By.XPATH,"(//*[@title='Contacts'])[1]")), "Waiting for Contacts page")
+        Browser.find_element_by_xpath("(//*[@title='Contacts'])[1]").location_once_scrolled_into_view
         Browser.find_element_by_xpath("(//*[@title='Contacts'])[1]").click()
+        
         try:
-            WebDriverWait(Browser,20).until(EC.visibility_of_element_located((By.XPATH,"(//span[contains(text(),'My Active Contacts')])[1]")), "Waiting for Contacts page")
+            WebDriverWait(Browser,120).until(EC.visibility_of_element_located((By.XPATH,"(//span[contains(text(),'My Active Contacts')])[2]")), "Waiting for Contacts page")
+            fn_objExist(Browser.find_element_by_xpath("(//span[contains(text(),'My Active Contacts')])[2]"))
         except:
-            WebDriverWait(Browser,20).until(EC.visibility_of_element_located((By.XPATH,"(//span[contains(text(),'My Active Contacts')])[2]")), "Waiting for Contacts page")
-#         fn_objExist(Browser.find_element_by_xpath("(//span[contains(text(),'My Active Contacts')])[2]"))
+            WebDriverWait(Browser,120).until(EC.visibility_of_element_located((By.XPATH,"(//span[contains(text(),'My Active Contacts')])[1]")), "Waiting for Contacts page")
+            fn_objExist(Browser.find_element_by_xpath("(//span[contains(text(),'My Active Contacts')])[1]"))
         fn_CaptureScreenShot("Pass", "Clicked on Contact link")
     except Exception as e:
         fn_rptStepDetails("Fail", "Failed to click on contact link with error {}".format(e))
@@ -311,9 +335,15 @@ def fn_ClickContactsLink():
 def fn_ClickOpportunitiesLink():
     try:
         WebDriverWait(Browser,40).until(EC.element_to_be_clickable((By.XPATH,"(//*[@title='Opportunities'])[1]")), "Waiting for Contacts page")
+        Browser.find_element_by_xpath("(//*[@title='Opportunities'])[1]").location_once_scrolled_into_view
         Browser.find_element_by_xpath("(//*[@title='Opportunities'])[1]").click()
-        WebDriverWait(Browser,100).until(EC.visibility_of_element_located((By.XPATH,"(//span[contains(text(),'My Open Opportunities')])[2]")), "Waiting for Opportunities page")
-#         fn_objExist(Browser.find_element_by_xpath("(//span[contains(text(),'My Open Opportunities')])[2]"))
+        
+        try:
+            WebDriverWait(Browser,20).until(EC.visibility_of_element_located((By.XPATH,"(//span[contains(text(),'My Open Opportunities')])[2]")), "Waiting for Opportunities page")
+            fn_objExist(Browser.find_element_by_xpath("(//span[contains(text(),'My Open Opportunities')])[2]"))
+        except:
+            fn_objExist(Browser.find_element_by_xpath("(//span[contains(text(),'My Open Opportunities')])[1]"))
+            
         fn_CaptureScreenShot("Pass", "Clicked on Opportunities link")
     except Exception as e:
         fn_rptStepDetails("Fail", "Failed to click on Opportunity Error {}".format(e))
@@ -322,10 +352,13 @@ def fn_ClickOpportunitiesLink():
 def fn_ClickQuotesLink():
     try:
         WebDriverWait(Browser,40).until(EC.element_to_be_clickable((By.XPATH,"(//*[@title='Quotes'])[1]")), "Waiting for Contacts page")
+        Browser.find_element_by_xpath("(//*[@title='Quotes'])[1]").location_once_scrolled_into_view
         Browser.find_element_by_xpath("(//*[@title='Quotes'])[1]").click()
-        WebDriverWait(Browser,100).until(EC.visibility_of_element_located((By.XPATH,"//span[@class='pa-bv pa-e pa-cp ']")), "Waiting for My Quotes page")
+        
+        WebDriverWait(Browser,20).until(EC.visibility_of_element_located((By.XPATH,"//span[@class='pa-bv pa-e pa-cp ']")), "Waiting for My Quotes page")
         fn_objExist(Browser.find_element_by_xpath("//span[@class='pa-bv pa-e pa-cp ']"))
         fn_CaptureScreenShot("Pass", "Clicked on Quote link")
+            
     except Exception as e:
         fn_rptStepDetails("Fail", "Failed to click on Quote link with exception {}".format(e))
 
@@ -345,7 +378,7 @@ def fn_ClickAddProductBtn():
 #         WebDriverWait(Browser,30).until(EC.visibility_of_element_located((By.XPATH,"//iframe[@id='WebResource_QuoteProductGrid']")), "Waiting for Product button")
         WebDriverWait(Browser,40).until(EC.frame_to_be_available_and_switch_to_it(Browser.find_element_by_xpath("//iframe[@id='WebResource_QuoteProductGrid']")))
 #         iframeProduct = Browser.find_element_by_xpath("//iframe[@id='WebResource_QuoteProductGrid']")
-#         sleep(1)
+        sleep(1)
 #         Browser.switch_to.frame(iframeProduct)
         Browser.find_element_by_id("btn_addproducts").click()  
 
@@ -512,9 +545,55 @@ def fn_SearchContact(strContactName):
         fn_rptStepDetails("Fail", "Error in contact page with error {}".format(e))
     
     
+@allure.step("Click on Appointment button on header")
+def fn_Click_AppointmentButton():
+    try:
+        WebDriverWait(Browser,30).until(EC.element_to_be_clickable((By.XPATH,'//button[@title="Appointment"]/span[1]')), "Waiting for Appointment button to load")
+        Browser.find_element_by_xpath('//button[@title="Appointment"]/span[1]').click()
+        WebDriverWait(Browser,30).until(EC.visibility_of_element_located((By.XPATH,'//input[@data-id="subject.fieldControl-text-box-text"]')), "Waiting for appointment page to load")
+        fn_CaptureScreenShot("Pass", "Clicked on Appointment button on header")
+    except Exception as e:
+        fn_rptStepDetails("Fail", "Unable to click on Appointment button with error {}".format(e))
     
     
-    
-    
-    
+@allure.step("Enter Appointment details")
+def fn_EnterAppointmentDetails(strAccountName):
+    try:
+        WebDriverWait(Browser,30).until(EC.visibility_of_element_located((By.XPATH,'//input[@data-id="subject.fieldControl-text-box-text"]')), "Waiting for appointment page to load")
+        strtodayTM=str(date.today())    
+        strtodayTM=str(strtodayTM).replace("-","").replace(" ","").replace(":","").replace(".","")
+        strAppointmentTxt = "Appointment_"+fn_RandString(7)+"_"+strtodayTM
+        #set appointment name
+        Browser.find_element_by_xpath('//input[@data-id="subject.fieldControl-text-box-text"]').clear()
+        Browser.find_element_by_xpath('//input[@data-id="subject.fieldControl-text-box-text"]').send_keys(strAppointmentTxt)
+        
+        # select account
+        Browser.find_element_by_xpath('//input[@data-id="troxcdi_account.fieldControl-LookupResultsDropdown_troxcdi_account_textInputBox_with_filter_new"]').click()
+        Browser.find_element_by_xpath('//input[@data-id="troxcdi_account.fieldControl-LookupResultsDropdown_troxcdi_account_textInputBox_with_filter_new"]').send_keys(strAccountName)
+        ActionChains(Browser).key_down(Keys.ENTER).perform()
+        WebDriverWait(Browser,30).until(EC.visibility_of_any_elements_located((By.XPATH,'//*[@id="id-549a8aa3-c349-4ab9-8bac-4873fa9a7a5c-12-troxcdi_account6-troxcdi_account.fieldControl-LookupResultsDropdown_troxcdi_account_3_resultsContainer_0_0"]')),"Waiting for account lookup to appear")
+        ActionChains(Browser).key_down(Keys.DOWN).perform()
+        ActionChains(Browser).key_down(Keys.ENTER).perform()
+        
+        #select Discussion
+        Browser.find_element_by_xpath("//button[@class='msos-caret-button']").click()
+        sleep(2)
+        # troxcdi_category_item1 click 2nd item
+        Browser.find_element_by_xpath('//*[@class="msos-selected-items msos-selection"]/li[2]/label[1]').click()
+        sleep(5)
+        fn_CaptureScreenShot("Pass", "Quote detils entered")
+        sleep(2)
+        Browser.find_element_by_xpath("//button[@class='msos-caret-button']").click()
+        
+        #select Regarding
+        Browser.find_element_by_xpath('//*[@data-id="regardingobjectid.fieldControl-LookupResultsDropdown_regardingobjectid_textInputBox_with_filter_new"]').click()
+        WebDriverWait(Browser,30).until(EC.visibility_of_element_located((By.XPATH,'//*[@id="id-549a8aa3-c349-4ab9-8bac-4873fa9a7a5c-5-regardingobjectid6-regardingobjectid.fieldControl-LookupResultsDropdown_regardingobjectid_2_resultsContainer_0_0"]')), "Waiting for recent records to appear")
+        ActionChains(Browser).key_down(Keys.DOWN).perform()
+        sleep(1)
+        ActionChains(Browser).key_down(Keys.ENTER).perform()
+        fn_CaptureScreenShot("Pass", "Appointment Details page")
+    except Exception as e:
+        print(e)
+        fn_rptStepDetails("Fail", "Failed in Appointment form with error {}".format(e))
+        
     

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <parameter>
-<key>Browser Version</key>
-<value>81.00</value>
+	<key>Browser Version</key>
+	<value>86.00</value>
+	<key>User</key>
+	<value>TestField</value>
+	<key>URL</key>
+	<value>tcdi-test.crm.dynamics.com</value>
+	
 </parameter>

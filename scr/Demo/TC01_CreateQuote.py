@@ -22,16 +22,18 @@ def test_CreateQuote ():
         fn_ClickOnNewQuote()
         fn_EnterQuoteSummaryInfo()
         fn_ClickProductTab()
+        sleep(10)
         fn_ClickAddProductBtn()
         fn_SelectProduct()
         fn_ClickAddCheckClose()
+        sleep(10)
         fn_Click_Save_OnHeader()
         fn_CaptureScreenShot("Pass", "Completed !!!")      
         fn_closeBrowser()
-        
         assert True
+        
     except:
         fn_CaptureScreenShot("Fail", "Unknown error look for error in report")
         fn_closeBrowser()
-        
+        assert False
 # test_CreateQuote()    

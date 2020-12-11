@@ -20,20 +20,17 @@ strAccountName = "Turntable Testing Company"
 def test_SearchAccounts ():
     try:
         LaunchBrowser()
-        fn_CaptureScreenShot("Pass","After Browser Launch")
+#         fn_CaptureScreenShot("Pass","After Browser Launch")
         fn_rptStepDetails("Pass", "Browser Launched Successfully")
-        sleep(2)
-        fn_rptStepDetails("Pass", "Before navigating to Accounts page")
-        fn_rptTC_Title("Before navigating to Accounts page")
         fn_Search_n_Navigate_Accounts_Page(strAccountName)
-        fn_rptTC_Title("After navigating to Accounts page")
         fn_verifyAccountsPage(strAccountName)
         fn_CaptureScreenShot("Pass", "Completed !!!")
+        fn_closeBrowser()
         assert True
+    except Exception as e:
+        fn_CaptureScreenShot("Fail", "Unknown error look for error in report {}".format(e))
         fn_closeBrowser()
-    except:
-        fn_CaptureScreenShot("Fail", "Unknown error look for error in report")
-        fn_closeBrowser()
+        assert False
         
         
 # test_SearchAccounts()

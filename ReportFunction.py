@@ -45,11 +45,12 @@ def fn_rptTC_Title(TC_Title=None):
     print(TC_Title)
     assert True
     
-@allure.step("*******ScreenShot {TestStep} **********")
+@allure.step("*******ScreenShot {TestStatus} {TestStep} **********")
 def fn_rpts_StepWith_Screenshot(TestStatus,TestStep):
     try:
+        
         if TestStatus == "Pass" or TestStatus =="pass":
-            fn_rptStepDetails(TestStatus, TestStep)
+#             fn_rptStepDetails(TestStatus, TestStep)
             allure.attach.file("../ScreenShot.PNG", TestStep, attachment_type=None, extension="PNG")
             assert True
         elif TestStatus == "Fail" or TestStatus =="fail":

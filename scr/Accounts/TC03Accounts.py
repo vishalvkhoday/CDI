@@ -134,12 +134,13 @@ def test_26(Step=None):
     allure.attach.file("C:/Users/DELL/Downloads/image.png", "ScreenShot", attachment_type=None, extension="PNG")
     sleep(random.randint(0,36))
     assert True
-     
+@allure.severity(severity_level="CRITICAL") 
 def test_27():
     test_26("This is test step1")
     test_26("This is test step2")
     test_26("This is test step3")
     fn_rptStepDetails("Pass","This is test step1")
+    
 #     rptStepDetails("Fail","This is test step2")
 #     rptStepDetails("Fail","This is test step3")
      
