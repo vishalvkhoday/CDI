@@ -14,24 +14,25 @@ from datetime import date
 @allure.story("This is left panel Navigation test")
 @allure.title("Validate all links in left panel")
 def test_LeftPanelNavigation ():
+    Browser=ChromeDriver()
     try:
-        LaunchBrowser()
-        fn_CaptureScreenShot("Pass","After Browser Launch")
+        LaunchBrowser(Browser)
+        fn_CaptureScreenShot(Browser,"Pass","After Browser Launch")
         sleep(2)
-        fn_ClickHomeLink()
-        fn_ClickRecentLink()
-        fn_ClickDashboardsLink()
-        fn_ClickActivitiesLink()
-        fn_ClickAccountsLink()
-        fn_ClickContactsLink()
-        fn_ClickOpportunitiesLink()
-        fn_ClickQuotesLink()
-        fn_CaptureScreenShot("Pass", "Completed !!!")
-        fn_closeBrowser()
+        fn_ClickHomeLink(Browser)
+        fn_ClickRecentLink(Browser)
+        fn_ClickDashboardsLink(Browser)
+        fn_ClickActivitiesLink(Browser)
+        fn_ClickAccountsLink(Browser)
+        fn_ClickContactsLink(Browser)
+        fn_ClickOpportunitiesLink(Browser)
+        fn_ClickQuotesLink(Browser)
+        fn_CaptureScreenShot(Browser,"Pass", "Completed !!!")
+        fn_closeBrowser(Browser)
         assert True
-    except:
-        fn_CaptureScreenShot("Fail", "Unknown error look for error in report")
-        fn_closeBrowser()
+    except Exception as e :
+        fn_CaptureScreenShot(Browser,"Fail", "Unknown error look for error in report {}".format(e))
+        fn_closeBrowser(Browser)
         assert False
         
         

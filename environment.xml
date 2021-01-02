@@ -1,0 +1,19 @@
+<environment>
+	<parameter>
+		<key>Browser</key>
+		<value>Chrome</value>
+	</parameter>
+	<parameter>
+		<key>Browser Version</key>
+		<value>87.0</value>
+	</parameter>
+	<parameter>
+		<key>User</key>
+		<value>testfield</value>
+	</parameter>
+	<parameter>
+		<key>URL</key>
+		<value>https://tcdi-test.crm.dynamics.com/</value>
+	</parameter>
+
+</environment>

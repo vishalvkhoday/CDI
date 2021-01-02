@@ -10,6 +10,7 @@ import allure_pytest
 from Commonfunction import *
 
 
+
 @allure.step("{TestStatus},{TestStep}")
 def fn_rptStepDetails(TestStatus=None,TestStep=None):
     try:
@@ -25,10 +26,15 @@ def fn_rptStepDetails(TestStatus=None,TestStep=None):
             assert False
     
     except Exception as e:
-        fn_rpts_StepWith_Screenshot("Fail", e)
+#         print(e)
+        allure.step(e)
+        assert False
+#         fn_rpts_StepWith_Screenshot("Fail", e)
+#         fn_rptStepDetails("Fail", e)
         
 @allure.description("{Description}")
 def fn_rptTestDescription(Description=None):
+    pass
     assert True
 
 @allure.epic("{UserStory}")
@@ -53,8 +59,7 @@ def fn_rpts_StepWith_Screenshot(TestStatus,TestStep):
 #             fn_rptStepDetails(TestStatus, TestStep)
             allure.attach.file("../ScreenShot.PNG", TestStep, attachment_type=None, extension="PNG")
             assert True
-        elif TestStatus == "Fail" or TestStatus =="fail":
-            
+        elif TestStatus == "Fail" or TestStatus =="fail":            
             allure.attach.file("../ScreenShot.PNG", TestStep, attachment_type=None, extension="PNG")
             assert False
     
